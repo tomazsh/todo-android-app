@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -28,14 +30,27 @@ public class TodoActivity extends ActionBarActivity {
     	editTextNewItem = (EditText)findViewById(R.id.editTextNewItem);
         listViewItems = (ListView)findViewById(R.id.listViewItems);
         listViewItems.setAdapter(todoAdapter);
+        setupListViewItemsLongClickListener();
     }
 
-
-    private void populateTodoItems() {
+	private void populateTodoItems() {
 		todoItems = new ArrayList<String>();
 		todoItems.add("London");
 		todoItems.add("Berlin");
 		todoItems.add("San Francisco");
+	}
+	
+	private void setupListViewItemsLongClickListener() {
+		listViewItems.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long rowId) {
+				todoItems.remove(position);
+				todoAdapter.notifyDataSetChanged();
+				return false;
+			}
+			
+		});
 	}
     
     public void onAddedItem(View v) {
