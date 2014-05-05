@@ -6,13 +6,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 public class TodoActivity extends ActionBarActivity {
 	private ArrayList<String> todoItems;
 	private ArrayAdapter<String> todoAdapter;
 	private ListView listViewItems;
+	private EditText editTextNewItem;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,7 @@ public class TodoActivity extends ActionBarActivity {
         populateTodoItems();
         todoAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, todoItems);
         
+    	editTextNewItem = (EditText)findViewById(R.id.editTextNewItem);
         listViewItems = (ListView)findViewById(R.id.listViewItems);
         listViewItems.setAdapter(todoAdapter);
     }
@@ -33,7 +37,12 @@ public class TodoActivity extends ActionBarActivity {
 		todoItems.add("Berlin");
 		todoItems.add("San Francisco");
 	}
-
+    
+    public void onAddedItem(View v) {
+		String itemText = editTextNewItem.getText().toString();
+		todoAdapter.add(itemText);
+		editTextNewItem.setText("");
+	}
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
