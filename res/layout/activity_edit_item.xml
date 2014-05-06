@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextItem"
         android:layout_alignParentRight="true"
+        android:onClick="onSaveItem"
         android:text="@string/save_button_text" />
 
 </RelativeLayout>

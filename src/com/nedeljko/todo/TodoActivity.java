@@ -24,6 +24,8 @@ public class TodoActivity extends ActionBarActivity {
 	private ListView listViewItems;
 	private EditText editTextNewItem;
 	
+	private final int EDIT_REQUEST_CODE = 1337;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,24 @@ public class TodoActivity extends ActionBarActivity {
         listViewItems.setAdapter(todoAdapter);
         setupListViewItemsListeners();
     }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	
+    	if (resultCode == RESULT_OK && requestCode == EDIT_REQUEST_CODE) {
+    		int itemPosition = data.getExtras().getInt("itemPosition", 0);
+    		String item = data.getExtras().getString("item");
+    		replaceItem(itemPosition, item);
+    	}
+    }
+    
+    private void replaceItem(int position, String newItem) {
+    	todoItems.remove(position);
+		todoItems.add(position, newItem);
+		todoAdapter.notifyDataSetChanged();
+		writeItems();
+	}
 	
 	private void readItems() {
 		File directory = getFilesDir();
@@ -77,18 +97,21 @@ public class TodoActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long rowId) {
-				launchEditView();
+				String item = todoItems.get(position);
+				launchEditView(position, item);
 			}
 		});
 	}
 	
-	private void launchEditView() {
+	private void launchEditView(int itemPosition, String item) {
 		Intent intent = new Intent(TodoActivity.this, EditItemActivity.class);
-		startActivity(intent);
+		intent.putExtra("itemPosition", itemPosition);
+		intent.putExtra("item", item);
+		startActivityForResult(intent, EDIT_REQUEST_CODE);
 	}
     
     public void onAddedItem(View v) {
-		String itemText = editTextNewItem.getText().toString();
+		String itemText = editTextNewItem.getText().toString().trim();
 		todoAdapter.add(itemText);
 		editTextNewItem.setText("");
 		writeItems();
