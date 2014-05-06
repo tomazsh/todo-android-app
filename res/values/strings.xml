@@ -6,5 +6,9 @@
     <string name="action_settings">Settings</string>
     <string name="add_new_item_hint">Add a new item</string>
     <string name="add_button_text">Add</string>
+    <string name="title_activity_edit_item">Edit Item</string>
+    <string name="edit_item_hint">Enter item</string>
+    <string name="save_button_text">Save</string>
+    <string name="edit_description_text">Edit item below:</string>
 
 </resources>
